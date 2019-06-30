@@ -51,16 +51,14 @@ int studentLength(); //有多少个学生
 
 char * getStudentNo(); //从用户输入得到学生的学号 
 
+Student * getStudent(int index); //根据索引得到学生 
 
 int main(int argc, char const *argv[])
 {
     printf("*************菜单*******************\n");
     printf("1:教师入口\n");
     printf("2:学生入口\n"); 
- 
     printf("********************************\n");
-    
-    
     
     char m = getchar();
     if(m == '1') { //学会选项
@@ -77,7 +75,7 @@ int main(int argc, char const *argv[])
 			
 			getchar();
 			m = getchar();
-			
+			 
 			switch (m)
 			{
 			case '1':
@@ -93,6 +91,7 @@ int main(int argc, char const *argv[])
 				updateStudent();
 			    break;
 			case '5':
+				sortStudent();
 			    break;
 			case '6':
 			    break;
@@ -107,8 +106,6 @@ int main(int argc, char const *argv[])
 			    break;
 			}
 		}
-    
-        
     } else if(m == '2') {   // 学生选项
          printf("1：按照学号或姓名查询学生成绩\n");
          printf("1：统计出总分或单科比自己分数高的学生信息和成绩\n");
@@ -116,6 +113,98 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
+
+
+
+Student * getStudent(int index) { //根据索引得到学生 
+	int len = studentLength();
+	if(len <= index) return NULL;
+	
+	
+	Student * temp;
+	for(int i = 0; i < studentLength(); i ++) {
+		if(i == index) return temp;
+		else temp=temp->next;
+	}
+	return NULL;
+} 
+
+
+void sortStudent()  //排名学生
+{
+	
+	if(first == NULL) {
+		printf("没有学生\n\n");
+		return;
+	} 	
+	
+	///总分或单科成绩
+	printf("1.按总分排名\n"); 
+	printf("2.按单科成绩排名\n");
+	
+	getchar();
+	char m = getchar();
+	if(m == '1') {
+	
+		int len = studentLength();
+	
+		for(int i = 0; i < len;i++) {
+			Student * sorting = getStudent(i);
+			for (int j = 1; j < len; j ++) {
+				Student * temp = getStudent(i);
+				
+				if(sorting->record->count < temp->record->count) {
+					Student * a = sorting;
+					
+					sorting->parent->next = temp;
+					temp->parent->next = a;
+				}
+			}
+		}
+	
+	} else if(m=='2') {
+		printf("1.数学\n"); 
+		printf("2.英语\n");
+		
+		m = getchar();
+		if(m == '1') {
+				int len = studentLength();
+		
+				for(int i = 0; i < len;i++) {
+					Student * sorting = getStudent(i);
+					for (int j = 1; j < len; j ++) {
+						Student * temp = getStudent(i);
+						
+						if(sorting->record->math < temp->record->math) {
+							Student * a = sorting;
+							
+							sorting->parent->next = temp;
+							temp->parent->next = a;
+						}
+					}
+				}
+		} else {
+				int len = studentLength();
+		
+				for(int i = 0; i < len;i++) {
+					Student * sorting = getStudent(i);
+					for (int j = 1; j < len; j ++) {
+						Student * temp = getStudent(i);
+						
+						if(sorting->record->english < temp->record->english) {
+							Student * a = sorting;
+							
+							sorting->parent->next = temp;
+							temp->parent->next = a;
+						}
+					}
+				}
+		}
+	}
+	
+	printf("排序完成\n\n");
+}
+
 
 char * getStudentNo() {	
 	printf("请输入学号:");
