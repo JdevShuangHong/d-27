@@ -67,23 +67,6 @@ const  char * cjfile = "d:/chengji.txt";
 
 int main(int argc, char const *argv[])
 {
-
-/*//	插入一些学生
-   char no[] = {'1','\0'};
-    for (int i = 0; i < 10; i ++) {
-        Student * newNode = (Student *) malloc(sizeof(Student));
-        Record * record = (Record *) malloc(sizeof(record));
-
-        newNode -> no = no;
-        newNode -> record = record;
-
-        if(first == NULL) {
-            first = newNode;
-        } else {
-            Student * last = getStudentLastNode();
-            last->next = newNode;
-        }
-    }*/
     FILE * file = fopen(cjfile,"rw");
     if(file == NULL) {
         printf("读取失败\n");
@@ -99,6 +82,8 @@ int main(int argc, char const *argv[])
             Student *student = (Student *) malloc(sizeof(Student));
             Record *record = (Record *) malloc(sizeof(Record));
 
+            student->next = NULL;
+            student->parent = NULL;
             student->record = record;
 
             student->no = arr[0];
@@ -121,7 +106,6 @@ int main(int argc, char const *argv[])
         //关闭文件
         fclose(file);
     }
-
 
     printf("*************菜单*******************\n");
     printf("1:教师入口\n");
@@ -256,7 +240,7 @@ void queryHigh(Student *login) { //查询更高的
             Student *s = getStudent(first, i);
             if(s->record->count > login->record->count) {
                 printf("学号：%s,姓名：%s,性别：%s,数学：%f,英语：%f,总分：%f\n",s->no,s->name,s->gender,
-                        s->record->math,s->record->english,s->record->count);
+                       s->record->math,s->record->english,s->record->count);
             }
         }
     }
@@ -277,10 +261,10 @@ void queryMark() { //查询分数
         scanf("%s",data);
         for(int i = 0; i < len;i++) {
             Student *s = getStudent(first, i);
-           if(strcmp(s->no,data)==0) {
-               printf("数学：%f,英语：%f,总分：%f\n",s->record->math,s->record->english,s->record->count);
-               return;
-           }
+            if(strcmp(s->no,data)==0) {
+                printf("数学：%f,英语：%f,总分：%f\n",s->record->math,s->record->english,s->record->count);
+                return;
+            }
         }
     } else if(m=='2') {
         printf("请输入学号：");
@@ -692,7 +676,7 @@ int studentLength(Student * head) {
     if (head == NULL)
         return 0;
 
-    int len = 0;
+    int len = 1;
 
     Student * temp = head;
     while (1) {
@@ -738,6 +722,8 @@ Student * getStudentLastNode() {
 
 void addStudent() {
     Student * newStudent = (Student *) malloc(sizeof(Student));
+    newStudent->next = NULL;
+    newStudent->parent = NULL;
     newStudent->record = (Record *) malloc(sizeof(Record));
 
 
