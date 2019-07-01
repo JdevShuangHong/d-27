@@ -107,94 +107,112 @@ int main(int argc, char const *argv[])
         fclose(file);
     }
 
-    printf("*************菜单*******************\n");
-    printf("1:教师入口\n");
-    printf("2:学生入口\n");
-    printf("********************************\n");
+    while (1) {
+        printf("*************菜单*******************\n");
+        printf("1:教师入口\n");
+        printf("2:学生入口\n");
+        printf("********************************\n");
 
-    char m = getchar();
-    if(m == '1') { //学会选项
-        while(1) {
-            printf("1：录入学生信息和成绩\n");
-            printf("2：增加学生信息和成绩\n");
-            printf("3：删除学生信息和成绩\n");
-            printf("4：修改学生信息和成绩\n");
-            printf("5：按照总分或单科成绩对学生进行排名\n");
-            printf("6：统计出男生或女生的平均分\n");
-            printf("7：统计出单科不及格的学生信息和成绩\n");
-            printf("8：保存学生成绩\n");
-            printf("9：排序已经存在的学生成绩\n");
+        char m = getchar();
+        if(m == '1') { //学会选项
+            while(1) {
+                printf("1：录入学生信息和成绩\n");
+                printf("2：增加学生信息和成绩\n");
+                printf("3：删除学生信息和成绩\n");
+                printf("4：修改学生信息和成绩\n");
+                printf("5：按照总分或单科成绩对学生进行排名\n");
+                printf("6：统计出男生或女生的平均分\n");
+                printf("7：统计出单科不及格的学生信息和成绩\n");
+                printf("8：保存学生成绩\n");
+                printf("9：排序已经存在的学生成绩\n");
+                printf("任意键：返回主界面\n");
 
-            getchar();
-            m = getchar();
+                getchar();
+                m = getchar();
 
-            switch (m)
-            {
-                case '1':
-                    addStudent();
+
+                int ret = 0;
+
+                switch (m)
+                {
+                    case '1':
+                        addStudent();
+                        break;
+                    case '2':
+                        addStudent();
+                        break;
+                    case '3':
+                        deleteStudent();
+                        break;
+                    case '4':
+                        updateStudent();
+                        break;
+                    case '5':
+                        sortStudent();
+                        break;
+                    case '6':
+                        avgStudent();
+                        break;
+                    case '7':
+                        failedStudent();
+                        break;
+                    case '8':
+                        saveStudent(first);
+                        break;
+                    case '9':
+                        sortFileStudent();
+                        break;
+                    default:
+                        ret = 1;
+                        break;
+                }
+
+                if(ret) {
+                    getchar();
                     break;
-                case '2':
-                    addStudent();
-                    break;
-                case '3':
-                    deleteStudent();
-                    break;
-                case '4':
-                    updateStudent();
-                    break;
-                case '5':
-                    sortStudent();
-                    break;
-                case '6':
-                    avgStudent();
-                    break;
-                case '7':
-                    failedStudent();
-                    break;
-                case '8':
-                    saveStudent(first);
-                    break;
-                case '9':
-                    sortFileStudent();
-                    break;
-                default:
-                    break;
+                }
             }
-        }
-    } else if(m == '2') {   // 学生选项
-        Student * login;
-        printf("1.请输入你的学号：");
-        char no[20] ;
-        scanf("%s",no);
+        } else if(m == '2') {   // 学生选项
+            Student * login;
+            printf("请输入你的学号：");
+            char no[20] ;
+            scanf("%s",no);
 
-        int len = studentLength(first);
-        for(int i = 0; i < len;i++) {
-            Student *s = getStudent(first, i);
-            if(strcmp(s->no,no)==0) {
-                login = s;
-                break;
+            int len = studentLength(first);
+            for(int i = 0; i < len;i++) {
+                Student *s = getStudent(first, i);
+                if(strcmp(s->no,no)==0) {
+                    login = s;
+                    break;
+                }
             }
-        }
 
-        if(login == NULL) {
-            printf("没有这个学生");
-            return 0;
-        }
+            if(login == NULL) {
+                printf("没有这个学生");
+                return 0;
+            }
 
-        while(1) {
+            while(1) {
 
-            printf("1：按照学号或姓名查询学生成绩\n");
-            printf("2：统计出总分或单科比自己分数高的学生信息和成绩\n");
+                printf("1：按照学号或姓名查询学生成绩\n");
+                printf("2：统计出总分或单科比自己分数高的学生信息和成绩\n");
+                printf("任意键：返回主界面\n");
 
-            getchar();
-            char c =getchar();
-            if(c=='1') {
-                queryMark();
-            } else if(c=='2') {
-                queryHigh(login);
+                getchar();
+                char c =getchar();
+                if(c=='1') {
+                    queryMark();
+                } else if(c=='2') {
+                    queryHigh(login);
+                } else {
+                    fflush(stdin);
+                    break;
+                }
             }
         }
     }
+
+
     return 0;
 }
 
